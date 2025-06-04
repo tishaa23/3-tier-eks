@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend #name of deployment
+  labels:
+    role: api #reference
+    env: test
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      role: api
+  template:
+    metadata:
+      labels:
+        role: api
+    spec:
+      containers:
+      - name: api
+        # image: backend ecr image
+        imagePullPolicy: Always
+        env:
+        - name: MONGO_CONN_STR
+          value: mongodb://mongodb-svc:27017/todo?directConnection=true
+        - name: MONGO_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-sec
+              key: username
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-sec
+              key: password
+        ports:
+        - containerPort: 5000
