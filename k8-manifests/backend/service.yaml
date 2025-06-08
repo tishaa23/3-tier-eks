@@ -3,9 +3,10 @@ kind: Service
 metadata:
   name: backend-svc
 spec:
+  selector:
+    role: api
   ports:
   - port: 5000
     protocol: TCP
   type: ClusterIP
-  selector:
-    role: backend-svc
+  

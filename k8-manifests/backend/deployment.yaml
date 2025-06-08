@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend #name of deployment
+  name: backend #name/lable of deployment
   labels:
-    role: api #reference
+    role: api #Pod label for matching
     env: test
 spec:
   replicas: 2
@@ -13,7 +13,7 @@ spec:
       maxUnavailable: 25%
   selector:
     matchLabels:
-      role: api
+      role: api #Actual pod will have role api
   template:
     metadata:
       labels:
@@ -24,8 +24,6 @@ spec:
         # image: backend ecr image
         imagePullPolicy: Always
         env:
-        - name: MONGO_CONN_STR
-          value: mongodb://mongodb-svc:27017/todo?directConnection=true
         - name: MONGO_USERNAME
           valueFrom:
             secretKeyRef:
@@ -36,5 +34,7 @@ spec:
             secretKeyRef:
               name: mongo-sec
               key: password
+        - name: MONGODB_URI
+          value: mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongodb-svc:27017/todosdb?authSource=admin
         ports:
         - containerPort: 5000
