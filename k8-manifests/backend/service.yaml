@@ -4,6 +4,7 @@ metadata:
   name: backend-svc
 spec:
   selector:
+    app: mytodoapp
     role: api
   ports:
   - port: 5000

@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: backend #name/lable of deployment
   labels:
+    app: mytodoapp 
     role: api #Pod label for matching
     env: test
 spec:
@@ -13,10 +14,12 @@ spec:
       maxUnavailable: 25%
   selector:
     matchLabels:
+      app: mytodoapp 
       role: api #Actual pod will have role api
   template:
     metadata:
       labels:
+        app: mytodoapp
         role: api
     spec:
       containers:

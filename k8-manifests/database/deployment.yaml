@@ -28,3 +28,10 @@ spec:
             secretKeyRef:
               name: mongo-sec
               key: password
+        volumeMounts:
+          - mountPath: /data/db
+            name: mongo-vol     # This must match below(vol name inside the pod)
+      volumes:
+        - name: mongo-vol
+          persistentVolumeClaim:
+            claimName: mongo-vol-claim #This PVC binds to mongo-pv
